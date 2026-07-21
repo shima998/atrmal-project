@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پنل مدیریت | عطر مال</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ---- Admin Styles ---- */
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F5E6CC;
+      --gold-dark: #B8860B;
+      --gold-gradient: linear-gradient(135deg, #D4AF37, #F5D76E, #B8860B, #D4AF37);
+    }
+
+    body {
+      background: var(--off-white);
+      min-height: 100vh;
+    }
+
+    /* Login */
+    .login-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .login-card {
+      background: var(--white);
+      padding: 48px 36px;
+      border-radius: 24px;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(212,175,55,0.15);
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--gold-gradient);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .login-logo .logo-text {
+      font-size: 2rem;
+      font-weight: 900;
+      background: var(--gold-gradient);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .login-logo p {
+      font-size: 0.9rem;
+      color: var(--text-gray);
+      margin-top: 4px;
+    }
+
+    .login-error {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      display: none;
+      text-align: center;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 16px;
+      background: var(--gold-gradient);
+      background-size: 200% 100%;
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 32px rgba(212,175,55,0.25);
+    }
+
+    .login-btn:hover {
+      background-position: right center;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(212,175,55,0.35);
+    }
+
+    /* Dashboard */
+    .dashboard {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      background: var(--white);
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(212,175,55,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .admin-search {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      max-width: 320px;
+      min-width: 200px;
+    }
+
+    .admin-search input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 12px;
+      font-family: var(--font);
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.3s;
+      background: #fafafa;
+    }
+
+    .admin-search input:focus {
+      border-color: var(--gold);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.1);
+    }
+
+    #searchClearBtn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      min-width: auto;
+    }
+
+    .admin-header h1 {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .admin-header h1 span {
+      color: var(--gold-dark);
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .admin-btn {
+      padding: 10px 20px;
+      border: 1.5px solid var(--gold);
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--gold-dark);
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-btn:hover {
+      background: var(--gold-gradient);
+      color: var(--white);
+      border-color: var(--gold);
+    }
+
+    .admin-btn.danger {
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+
+    .admin-btn.danger:hover {
+      background: #e74c3c;
+      color: white;
+      border-color: #e74c3c;
+    }
+
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .stat-card {
+      background: var(--white);
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(212,175,55,0.1);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 900;
+      background: var(--gold-gradient);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      margin-top: 4px;
+    }
+
+    .admin-table-wrapper {
+      background: var(--white);
+      border-radius: 16px;
+      border: 1px solid rgba(212,175,55,0.1);
+      overflow: hidden;
+      margin: 24px 0 40px;
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font);
+    }
+
+    .admin-table th {
+      background: var(--off-white);
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      text-align: right;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .admin-table td {
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .admin-table tr:hover td {
+      background: rgba(212,175,55,0.03);
+    }
+
+    .admin-table .empty-msg td {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-light);
+    }
+
+    .admin-footer {
+      text-align: center;
+      padding: 20px 0 40px;
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    /* ---- Checkbox ---- */
+    .admin-table input[type="checkbox"] {
+      width: 18px; height: 18px; cursor: pointer; accent-color: var(--gold);
+    }
+
+    #selectAll { display: block; margin: 0 auto; }
+
+    /* ---- Modal ---- */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1000;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+
+    .modal-card {
+      background: var(--white); border-radius: 20px; padding: 32px;
+      width: 100%; max-width: 480px; box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(212,175,55,0.15); position: relative;
+    }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;
+    }
+
+    .modal-header h3 { font-size: 1.2rem; font-weight: 800; color: var(--text-dark); }
+
+    .modal-close {
+      font-size: 1.5rem; cursor: pointer; color: var(--text-light); transition: color 0.3s;
+      line-height: 1; padding: 0 4px;
+    }
+
+    .modal-close:hover { color: var(--text-dark); }
+
+    .modal-actions {
+      display: flex; gap: 12px; margin-top: 24px;
+    }
+
+    .modal-actions .admin-btn { flex: 1; justify-content: center; }
+
+    @media (max-width: 768px) {
+      .login-card { padding: 32px 20px; }
+      .admin-header .container { flex-direction: column; align-items: stretch; }
+      .admin-search { max-width: 100%; min-width: auto; order: -1; }
+      .admin-actions { width: 100%; }
+      .admin-btn { flex: 1; justify-content: center; font-size: 0.8rem; padding: 8px 12px; }
+      .admin-table th, .admin-table td { padding: 8px 10px; font-size: 0.75rem; }
+      .admin-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat-card { padding: 14px; }
+      .stat-number { font-size: 1.5rem; }
+      .stat-label { font-size: 0.75rem; }
+    }
+
+    @media (max-width: 480px) {
+      .login-card { padding: 24px 16px; border-radius: 16px; }
+      .login-logo .logo-text { font-size: 1.6rem; }
+      .admin-header h1 { font-size: 1.1rem; }
+      .admin-table th, .admin-table td { padding: 6px 8px; font-size: 0.7rem; }
+      .admin-table-wrapper { border-radius: 12px; margin: 16px 0 30px; }
+      .admin-stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stat-card { padding: 12px; }
+      .stat-number { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== LOGIN ==================== -->
+  <section class="login-section" id="loginSection">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="logo-text">عطر مال</div>
+        <p>پنل مدیریت فروشگاه</p>
+      </div>
+      <div class="login-error" id="loginError">رمز عبور اشتباه است</div>
+      <form id="loginForm" autocomplete="off">
+        <div class="form-group">
+          <label for="password">رمز عبور مدیریت</label>
+          <input type="password" id="password" class="form-control" placeholder="رمز عبور را وارد کنید" required>
+        </div>
+        <button type="submit" class="login-btn">ورود به پنل مدیریت</button>
+      </form>
+      <div style="text-align:center;margin-top:16px;">
+        <a href="index.html" style="color:var(--text-light);font-size:0.8rem;text-decoration:none;">← بازگشت به سایت</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <section class="dashboard" id="dashboard">
+    <header class="admin-header">
+      <div class="container">
+        <h1>پنل مدیریت <span>عطر مال</span></h1>
+        <div class="admin-search">
+          <input type="text" id="searchInput" placeholder="جستجوی نام، نام خانوادگی یا شماره ملی...">
+          <button class="admin-btn" id="searchBtn">🔍 جستجو</button>
+          <button class="admin-btn" id="searchClearBtn" style="display:none;">✕ پاک</button>
+        </div>
+        <div class="admin-actions">
+          <button class="admin-btn" id="exportBtn">📥 خروجی CSV</button>
+          <button class="admin-btn" id="refreshBtn">⟳ بروزرسانی</button>
+          <button class="admin-btn" id="batchEditBtn">✏️ ویرایش انتخاب شده</button>
+          <button class="admin-btn danger" id="batchDeleteBtn">🗑 حذف انتخاب شده</button>
+          <button class="admin-btn danger" id="clearLocalBtn">🗑 پاک کردن دیتای محلی</button>
+          <button class="admin-btn danger" id="logoutBtn">🚪 خروج</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Stats -->
+      <div class="admin-stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalCount">0</div>
+          <div class="stat-label">کل ثبت‌نام‌ها</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="todayCount">0</div>
+          <div class="stat-label">ثبت‌نام امروز</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="phoneCount">0</div>
+          <div class="stat-label">شماره تماس ثبت شده</div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="admin-table-wrapper">
+        <table class="admin-table" id="usersTable">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll"></th>
+              <th>نام و نام خانوادگی</th>
+              <th>۴ رقم آخر ملی</th>
+              <th>شماره تماس</th>
+              <th>تاریخ ثبت</th>
+              <th>عملیات</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr class="empty-msg">
+              <td colspan="6">هنوز کاربری ثبت نام نکرده است</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="admin-footer">
+      تمامی حقوق متعلق به عطر مال می‌باشد
+    </div>
+  </section>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" id="editModal" style="display:none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>ویرایش کاربر</h3>
+        <span class="modal-close" id="modalClose">✕</span>
+      </div>
+      <form id="editForm" autocomplete="off">
+        <div class="form-group">
+          <label for="editName">نام و نام خانوادگی</label>
+          <input type="text" id="editName" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="editCode">۴ رقم آخر شماره ملی</label>
+          <input type="text" id="editCode" class="form-control" maxlength="4" inputmode="numeric" pattern="[0-9]{4}" required>
+        </div>
+        <div class="form-group">
+          <label for="editPhone">شماره تماس</label>
+          <input type="tel" id="editPhone" class="form-control" inputmode="numeric">
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="admin-btn" id="modalSaveBtn">ذخیره</button>
+          <button type="button" class="admin-btn danger" id="modalCancelBtn">انصراف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>
